@@ -4,11 +4,10 @@ html{
 }
 
 body {
-  font-family: sans-serif;
   height:100%;
   width:100%;
   margin:0;
-  background-color:#e8e8e8;
+  background-color:#ffa54f;
 }
 
 #root{
