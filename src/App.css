@@ -3,7 +3,8 @@ button:active{
   background-color: transparent;
   border:none;
   outline:none;
-	padding:0;
+  padding:0;
+  font-family: 'Indie Flower';
 }
 
 p{
@@ -54,8 +55,10 @@ p{
 }
 
 .Square  p{
+  position: relative;
   font-size:4vh;
   margin:0;
+  top:-0.5vh;
 }
 
 .Game .reset{
