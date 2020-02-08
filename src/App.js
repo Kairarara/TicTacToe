@@ -28,7 +28,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <button className="option" onClick={()=>{this.changeMode()}}>
+        <button className="changeMode" onClick={()=>{this.changeMode()}}>
           <p>Singleplayer: {(this.state.singlePlayer)?"on":"off"}</p>
         </button>
         <Game singlePlayer={this.state.singlePlayer} gameState={this.state.gameState} changeGameState={this.changeGameState}/>
@@ -41,7 +41,7 @@ class Game extends Component {
   constructor(props){
     super(props)
     this.state={
-      values:Array(9).fill(null),
+      boardValues:Array(9).fill(null),
       xIsNext:true,
       winner:null,
       turn:0,
@@ -52,7 +52,7 @@ class Game extends Component {
   resetBoard(){
     this.props.changeGameState("start");
     this.setState({
-      values:Array(9).fill(null),
+      boardValues:Array(9).fill(null),
       xIsNext:true,
       winner:null,
       turn:0,
@@ -61,22 +61,22 @@ class Game extends Component {
   }
   
   handleClick(i){
-    if(this.state.winner===null && this.state.values[i]===null && this.state.enabled){
+    if(this.state.winner===null && this.state.boardValues[i]===null && this.state.enabled){
       if(this.props.gameState!=="playing"){
         this.props.changeGameState("playing");
       }
-      let copy=this.state.values.slice();
+      let boardCopy=this.state.boardValues.slice();
       if(this.state.xIsNext){
-        copy[i]="x"
+        boardCopy[i]="x"
       } else {
-        copy[i]="o"
+        boardCopy[i]="o"
       }
       this.setState({
         xIsNext:!this.state.xIsNext,
-        values:copy,
+        boardValues:boardCopy,
         turn:this.state.turn+1
       },()=>{
-        let winner=this.getWinner(copy);
+        let winner=this.getWinner(boardCopy);
         if(winner!==null){
           this.setState({
             winner:winner
@@ -99,7 +99,7 @@ class Game extends Component {
     }
   }
   
-  getWinner(values){
+  getWinner(boardValues){
     const winningCombos=[
       [0,3,6],
       [0,1,2],
@@ -112,11 +112,11 @@ class Game extends Component {
     ]
     let result=null
     winningCombos.forEach((combo)=>{
-      let player = values[combo[0]];
+      let player = boardValues[combo[0]];
       if (player===null) return;
       let win=true;
       for(let i=1; i<combo.length; i++){
-        if(player!==values[combo[i]]){
+        if(player!==boardValues[combo[i]]){
           win=false;
           break;
         }
@@ -132,7 +132,7 @@ class Game extends Component {
   /*
     we use the minmax algorithm where the o player wants the score to be the smallest possible and the x wants it to be the biggest
   */
-  getBestMove(board=this.state.values,turn=0,xIsNext=this.state.xIsNext){
+  getBestMove(board=this.state.boardValues,turn=0,xIsNext=this.state.xIsNext){
     board=board.slice()
     let scores=[];  
     let result=[-1,-1];
@@ -185,11 +185,14 @@ class Game extends Component {
     let squares=[];
     
     for(let i=0;i<9;i++){
-      squares.push(<Square value={this.state.values[i]} onClick={()=>this.handleClick(i)}/>)
+      squares.push(<Square value={this.state.boardValues[i]} onClick={()=>this.handleClick(i)}/>)
     }
     
 
     let result="";
+    if(this.state.turn===9){
+      result="DRAW"
+    }
     if(this.state.winner!==null){
       if(this.state.winner==='x'){
         result="X WINS!"
@@ -206,7 +209,7 @@ class Game extends Component {
         <button className="reset" onClick={()=>this.resetBoard()}>
           <p>Reset game</p>
         </button>
-        <div className="results">
+        <div className="result">
           <p>{result}</p>
         </div>
       </div>
