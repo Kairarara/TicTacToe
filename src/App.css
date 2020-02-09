@@ -67,16 +67,24 @@ p{
 }
 
 .Game .result p{
+  margin:0;
   opacity: 0.8;
   font-size:5vh;
   color:red;
 }
 
-@media (max-height:700px) and (max-width:500px){
+@media (max-width:500px){
 
   .App{
     height:100%;
-    width:100%;
+  }
+
+}
+
+@media (max-height:700px){
+
+  .App{
+    height:100%;
   }
   
   .changeMode{
